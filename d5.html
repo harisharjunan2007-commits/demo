@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Q&A</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    padding:20px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+}
+
+.ask-section{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.ask-section input{
+    flex:1;
+    padding:10px;
+}
+
+.ask-section button{
+    padding:10px 20px;
+    cursor:pointer;
+}
+
+#search{
+    width:100%;
+    padding:10px;
+    margin-bottom:20px;
+}
+
+.question{
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    padding:12px 0;
+}
+
+.vote{
+    width:60px;
+    text-align:center;
+}
+
+.vote button{
+    border:none;
+    background:none;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.question-text{
+    flex:1;
+    font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Live Q&A</h1>
+
+    <div class="ask-section">
+        <input type="text" id="questionInput" placeholder="Ask a question...">
+        <button onclick="addQuestion()">Ask</button>
+    </div>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search questions..."
+        onkeyup="searchQuestions()"
+    >
+
+    <div id="questions"></div>
+</div>
+
+<script>
+let questions = [
+    { text: "What is HTML?", votes: 8 },
+    { text: "How does CSS work?", votes: 6 },
+    { text: "What is JavaScript used for?", votes: 10 },
+    { text: "How do I deploy a website to Vercel?", votes: 5 },
+    { text: "What is React?", votes: 7 },
+    { text: "What is Next.js?", votes: 4 },
+    { text: "How does a database store data?", votes: 3 },
+    { text: "What is the difference between frontend and backend?", votes: 9 },
+    { text: "How can I improve website performance?", votes: 2 },
+    { text: "What are API routes?", votes: 1 },
+    { text: "Explain Segmentation and Paging.", votes: 4 },
+    { text: "What is Object Oriented Programming?", votes: 5 },
+    { text: "Difference between DFA and NFA?", votes: 6 }
+];
+
+function displayQuestions(list = questions) {
+    const container = document.getElementById("questions");
+    container.innerHTML = "";
+
+    list.forEach((q, index) => {
+        container.innerHTML += `
+        <div class="question">
+            <div class="vote">
+                <button onclick="upvote(${index})">▲</button>
+                <div>${q.votes}</div>
+            </div>
+            <div class="question-text">${q.text}</div>
+        </div>`;
+    });
+}
+
+function addQuestion() {
+    const input = document.getElementById("questionInput");
+
+    if (input.value.trim() !== "") {
+        questions.unshift({
+            text: input.value,
+            votes: 0
+        });
+
+        input.value = "";
+        displayQuestions();
+    }
+}
+
+function upvote(index) {
+    questions[index].votes++;
+    displayQuestions();
+}
+
+function searchQuestions() {
+    const keyword =
+        document.getElementById("search").value.toLowerCase();
+
+    const filtered = questions.filter(q =>
+        q.text.toLowerCase().includes(keyword)
+    );
+
+    displayQuestions(filtered);
+}
+
+displayQuestions();
+</script>
+
+</body>
+</html>
